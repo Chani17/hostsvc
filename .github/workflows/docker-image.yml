@@ -26,3 +26,24 @@ jobs:
         with: 
           push: true
           tags: chani17/hostservice:${{ github.sha }}
+
+  updateYaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout
+        uses: actions/checkuot@v3
+        with:
+          repository: 'chani17/hostsvc-cd'
+          token: ${{ secrets.GIT_TOKEN }}
+      
+      - name: 2. Change Docker Tag
+        run: |
+          sed "s/image: chani17\/node-app:.*/images: chani17\/node-app:${{ github.sha }}/g"
+          git config --global user.email "cucute8878@naver.com"
+          git config --global user.name "chani17"
+          git commit -am "triggered by github action"
+          git push origin main
+
+
+
+    
